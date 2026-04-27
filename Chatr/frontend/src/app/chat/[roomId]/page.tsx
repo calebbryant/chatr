@@ -96,6 +96,30 @@ export default function RoomPage() {
     [sendTyping]
   );
 
+  const handleEdit = useCallback(
+    (messageId: string, content: string) => {
+      // Send edit via WebSocket or API
+      wsSendMessage(content);
+    },
+    [wsSendMessage]
+  );
+
+  const handleDelete = useCallback(
+    (messageId: string) => {
+      // Send delete via WebSocket or API
+      wsSendMessage(`[Deleted message: ${messageId}]`);
+    },
+    [wsSendMessage]
+  );
+
+  const handleReaction = useCallback(
+    (messageId: string, emoji: string) => {
+      // Send reaction via WebSocket or API
+      wsSendMessage(`${emoji} on message ${messageId}`);
+    },
+    [wsSendMessage]
+  );
+
   // Filter typing users to exclude self
   const filteredTypingUsers = new Map(
     Array.from(typingUsers.entries()).filter(([id]) => id !== user?.id)
@@ -172,6 +196,9 @@ export default function RoomPage() {
         hasMore={hasMore}
         loadingMore={loadingMore}
         onLoadMore={handleLoadMore}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onReaction={handleReaction}
       />
 
       {/* Input */}
